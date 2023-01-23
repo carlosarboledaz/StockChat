@@ -20,6 +20,7 @@
 <hr>
 
 <ul id="messagesList">
+    <!--Change this so that the messages displayed are the ones stored in the database-->
     @foreach (var message in messages)
     {
         <li>@message</li>
@@ -32,7 +33,6 @@
     private string? loggedInUser;
     private string? userId;
     private string? messageInput;
-    //private IEnumerable<Claim> claims = Enumerable.Empty<Claim>();
 
     protected override async Task OnInitializedAsync()
     {
