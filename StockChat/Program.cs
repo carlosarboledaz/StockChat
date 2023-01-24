@@ -5,6 +5,8 @@ using StockChat.Areas.Identity;
 using StockChat.Data;
 using Microsoft.AspNetCore.ResponseCompression;
 using StockChat.Hubs;
+using StockChat.Events;
+using StockChat.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,10 +25,13 @@ builder.Services.AddResponseCompression(opts =>
         new[] { "application/octet-stream" });
 });
 
-
+builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
+builder.Services.AddScoped<IRabbitMQConsumer, RabbitMQConsumer>();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-builder.Services.AddSingleton<WeatherForecastService>(); //Remove this later
+builder.Services.AddHttpClient<IStockService, StockService>();
 
+
+builder.Services.AddSingleton<WeatherForecastService>(); //Remove this later
 
 
 var app = builder.Build();
