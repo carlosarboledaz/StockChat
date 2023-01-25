@@ -2,30 +2,36 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Components.Authorization
+@using StockChat.Data
+@using StockChat.Data.Repositories
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 @inject NavigationManager Navigation
+@inject IRepository<Message> _repository;
 @implements IAsyncDisposable
 
 <PageTitle>Index</PageTitle>
 
-<div class="form-group">
-    <label>
-        Message:
-        <input @bind="messageInput" size="50" />
-    </label>
+<div id="messageList">
+    <ul>
+        @foreach (var message in messages)
+        {
+            <li>@message</li>
+        }
+    </ul>
 </div>
-<button @onclick="Send" disabled="@(!IsConnected)">Send</button>
 
-<hr>
+<br />
 
-<ul id="messagesList">
-    <!--Change this so that the messages displayed are the ones stored in the database-->
-    @foreach (var message in messages)
-    {
-        <li>@message</li>
-    }
-</ul>
+<div id="chatInput">
+    <div class="form-group">
+        <label>
+            Message:
+            <input @bind="messageInput" size="50" />
+        </label>
+    </div>
+    <button @onclick="Send" disabled="@(!IsConnected)">Send</button>
+</div>
 
 @code {
     private HubConnection? hubConnection;
@@ -47,9 +53,17 @@
                 .WithUrl(Navigation.ToAbsoluteUri("/chathub"))
                 .Build();
 
+            var chatMessages = _repository.All().ToList().OrderBy(x => x.Date);
+            foreach (var message in chatMessages)
+            {
+                var encodedMessage = $"[{message.Username}]: {message.Text}";
+                messages.Add(encodedMessage);
+            }
+
             hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
             {
-                var encodedMsg = $"{user}: {message}";
+                var encodedMsg = $"[{user}]: {message}";
+                messages.RemoveAt(0);
                 messages.Add(encodedMsg);
                 InvokeAsync(StateHasChanged);
             });

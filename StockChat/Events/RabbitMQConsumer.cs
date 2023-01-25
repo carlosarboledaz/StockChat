@@ -9,11 +9,11 @@ namespace StockChat.Events
     public class RabbitMQConsumer : BackgroundService
     {
 
-        private readonly IHubContext<ChatHub> chatHubContext;
+        private readonly IHubContext<ChatHub> _chatHubContext;
 
         public RabbitMQConsumer(IHubContext<ChatHub> chatHubContext)
         {
-            this.chatHubContext = chatHubContext;
+            _chatHubContext = chatHubContext;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -58,7 +58,7 @@ namespace StockChat.Events
 
         private async Task SendMessageToChatRoom(string message)
         {
-            await chatHubContext.Clients.All.SendAsync("ReceiveMessage", "StockBot", message);
+            await _chatHubContext.Clients.All.SendAsync("ReceiveMessage", "StockBot", message);
         }
 
     }
