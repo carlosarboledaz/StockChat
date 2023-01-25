@@ -9,14 +9,12 @@ namespace StockChat.Hubs
     {
         public readonly ApplicationDbContext _context;
         private readonly IRabbitMQProducer _rabbitMQProducer;
-        private readonly IRabbitMQConsumer _rabbitMQConsumer;
         private readonly IStockService _stockService;
 
-        public ChatHub(ApplicationDbContext context, IRabbitMQProducer rabbitMQProducer, IRabbitMQConsumer rabbitMQConsumer, IStockService stockService)
+        public ChatHub(ApplicationDbContext context, IRabbitMQProducer rabbitMQProducer, IStockService stockService)
         {
             _context = context;
             _rabbitMQProducer = rabbitMQProducer;
-            _rabbitMQConsumer = rabbitMQConsumer;
             _stockService = stockService;
         }
 
@@ -25,12 +23,9 @@ namespace StockChat.Hubs
             if (message.Contains("/stock="))
             {
                 var stockCode = message.Split("=")[1];
-                var stockResult = await _stockService.GetStockInfo(stockCode);
-                //Send the message to RabbitMQ
-                _rabbitMQProducer.SendStockMessage(stockResult);
-                //Read the message from RabbitMQ
-                var stockMessage = _rabbitMQConsumer.GetStockMessage();
-                await Clients.All.SendAsync("ReceiveMessage", "StockBot", stockMessage);
+                var stockMessage = await _stockService.GetStockInfo(stockCode);
+                await Clients.All.SendAsync("ReceiveMessage", user, message);
+                _rabbitMQProducer.SendStockMessage(stockMessage);
             }
             else
             {

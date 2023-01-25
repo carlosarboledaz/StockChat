@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StockChat.Areas.Identity;
 using StockChat.Data;
@@ -25,14 +24,11 @@ builder.Services.AddResponseCompression(opts =>
         new[] { "application/octet-stream" });
 });
 
-builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
-builder.Services.AddScoped<IRabbitMQConsumer, RabbitMQConsumer>();
-builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AppUser>>();
 builder.Services.AddHttpClient<IStockService, StockService>();
-
-
 builder.Services.AddSingleton<WeatherForecastService>(); //Remove this later
-
+builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
+builder.Services.AddHostedService<RabbitMQConsumer>();
 
 var app = builder.Build();
 
@@ -65,3 +61,5 @@ app.MapHub<ChatHub>("/chathub");
 app.MapFallbackToPage("/_Host");
 
 app.Run();
+
+
