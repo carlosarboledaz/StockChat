@@ -31,8 +31,16 @@ namespace StockChat.Hubs
             {
                 var stockCode = message.Split("=")[1];
                 var stockMessage = await _stockService.GetStockInfo(stockCode);
-                await Clients.All.SendAsync("ReceiveMessage", user, message);
-                _rabbitMQProducer.SendStockMessage(stockMessage);
+                if (string.IsNullOrEmpty(stockMessage))
+                {
+                    message = "The provided stock code is invalid. Please double check it";
+                    await Clients.All.SendAsync("ReceiveMessage", "StockBot", message);
+                }
+                else
+                {
+                    await Clients.All.SendAsync("ReceiveMessage", user, message);
+                    _rabbitMQProducer.SendStockMessage(stockMessage);
+                }
             }
             else
             {

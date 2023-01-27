@@ -5,6 +5,11 @@ namespace StockChat.Events
 {
     public class RabbitMQProducer: IRabbitMQProducer
     {
+
+        public RabbitMQProducer()
+        {
+        }
+
         public void SendStockMessage(string message)
         {
             //Here we specify the Rabbit MQ Server. we use rabbitmq docker image and use it

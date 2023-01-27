@@ -10,26 +10,36 @@ namespace StockChat.Events
     {
 
         private readonly IHubContext<ChatHub> _chatHubContext;
+        private bool sendMessageToChatRoom;
 
         public RabbitMQConsumer(IHubContext<ChatHub> chatHubContext)
         {
             _chatHubContext = chatHubContext;
+            sendMessageToChatRoom = true;
+        }
+
+        public RabbitMQConsumer()
+        {
+            sendMessageToChatRoom = false;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            
+            string stockMessage = string.Empty;
+
             stoppingToken.Register(() =>
                 Console.WriteLine("Background task is stopping."));
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                //Here we specify the Rabbit MQ Server. we use rabbitmq docker image and use it
+                //Here we specify the Rabbit MQ Server. We use rabbitmq docker image and use it
                 var factory = new ConnectionFactory
                 {
                     HostName = "localhost"
                 };
 
-                //Create the RabbitMQ connection using connection factory details as i mentioned above
+                //Create the RabbitMQ connection using connection factory details
                 var connection = factory.CreateConnection();
 
                 //Here we create channel with session and model
@@ -43,8 +53,11 @@ namespace StockChat.Events
                 consumer.Received += async (model, eventArgs) =>
                 {
                     var body = eventArgs.Body.ToArray();
-                    var stockMessage = Encoding.UTF8.GetString(body);
-                    await SendMessageToChatRoom(stockMessage);
+                    stockMessage = Encoding.UTF8.GetString(body);
+                    if (sendMessageToChatRoom)
+                    {
+                        await SendMessageToChatRoom(stockMessage);
+                    }
                 };
 
                 //read the message
@@ -53,7 +66,6 @@ namespace StockChat.Events
                 await Task.Delay(1000, stoppingToken);
             }
 
-            Console.WriteLine("Background task is stopping.");
         }
 
         private async Task SendMessageToChatRoom(string message)

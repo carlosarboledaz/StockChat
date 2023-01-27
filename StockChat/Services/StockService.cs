@@ -16,17 +16,26 @@ namespace StockChat.Services
 
         public async Task<string> GetStockInfo(string stockCode)
         {
-            var uri = $"https://stooq.com/q/l/?s={stockCode}&f=sd2t2ohlcv&h&e=csv";
+            string stockQuoteMessage = string.Empty;
+            try
+            {
+                var uri = $"https://stooq.com/q/l/?s={stockCode}&f=sd2t2ohlcv&h&e=csv";
 
-            var responseString = await _httpClient.GetStringAsync(uri);
+                var responseString = await _httpClient.GetStringAsync(uri);
 
-            byte[] byteArray = Encoding.ASCII.GetBytes(responseString);
-            MemoryStream stream = new MemoryStream(byteArray);
+                byte[] byteArray = Encoding.ASCII.GetBytes(responseString);
+                MemoryStream stream = new MemoryStream(byteArray);
 
-            var result = CSVHelper.ReadCSV<StockResult>(stream).ToList();
-            var stockQuoteMessage = $"{stockCode.ToUpper()} quote is ${result[0].Close} per share";
+                var result = CSVHelper.ReadCSV<StockResult>(stream).ToList();
+                stockQuoteMessage = $"{stockCode.ToUpper()} quote is ${result[0].Close} per share";
 
-            return stockQuoteMessage;
+                return stockQuoteMessage;
+            }
+            catch(Exception e)
+            {
+                return stockQuoteMessage;
+            }
+            
         }
 
     }
