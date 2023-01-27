@@ -20,7 +20,7 @@ These are some of the main projects and folder to consider in the solution:
 
 * The Events folder contains the RabbitMQ producer and consumer. The consumer is a background task that keeps listening for changes added into the queue in RabbitMQ and whenever a new message is added, it reads it and sends it back to the chat room.
 
-* The Hubs folder contains the code SignalR code that handles messages to be sent to the chat room and the logic to either call or not call the repository layer to save changes on the database.
+* The Hubs folder contains the SignalR code that handles the messages to be sent to the chat room and the logic to either call or not call the repository layer to save changes on the database.
 
 * The Pages folder contains the views of the application, with the index.blazor being the main one, where the chat messages are displayed.
 
