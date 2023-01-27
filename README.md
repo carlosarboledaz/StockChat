@@ -6,6 +6,8 @@ The solution was developed using .NET 6 with SignalR for the real time communica
 
 It was used the CSV Helper nuget package to handle the CSV parsing and MSTest for the tests.
 
+The IDE used was Visual Studio Professional 2022, version 17.2.6
+
 ## Code structure
 
 It was used the Blazor Server App template provided by Visual Studio and it was followed this Microsoft guide to create the initial setup for the basic chat functionality with SignalR: [Use ASP.NET Core SignalR with Blazor](https://learn.microsoft.com/en-us/aspnet/core/blazor/tutorials/signalr-blazor?view=aspnetcore-7.0&tabs=visual-studio&pivots=server). Then, the solution and folder structure was adjusted according to the requirements.
@@ -37,20 +39,22 @@ These are some of the main projects and folder to consider in the solution:
 4. Make sure to install the .NET 6 SDK: https://dotnet.microsoft.com/en-us/download/dotnet/6.0. Choose the operating system that better works for you and
 use the latest stable version. At the moment of writing this documentation, the latest version is 6.0.405. Once the installation is finished, run the command `dotnet` in the terminal. If the installation was correct, it would output the corresponding version.
 
-5. Create the database by running this Entity Framework commmand:
+5. Make sure to install [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver16). If you are using Visual Studio, it should already be installed.
+
+6. Create the database by running this Entity Framework commmand in the Visual Studio Package Manager Console
 
 `update-database`
 
 If you are using Visual Studio, it should be possible to see the created database in the SQL Server Object Explorer, since that will create a localBD database. If not, it should be possible to explore and query the database using any other SQL integrated environment, such as SQL Server Management Studio.
 
-6. Open the terminal tool of your preference and navigate to the path where the `Program.cs` file is located. The relative path would be *\StockChat\StockChat*.
-You can also use an IDE that allows you to open a terminal, such as, for example, Visual Studio Code. If you are using Visual Studio, simply run the application from there.
+7. Open the terminal tool of your preference and navigate to the path where the `Program.cs` file is located. The relative path would be *\StockChat\StockChat*.
+You can also use an IDE that allows you to open a terminal, such as, for example, Visual Studio Code. 
 
-7. Once there, run the application with the command `dotnet run`
+8. Once there, run the application with the command `dotnet run`. If you are using Visual Studio, simply run the application from there.
 
-8. After this, the chat application will be running and you will be able to access it from https://localhost:7149/
+9. After this, the chat application will be running and you will be able to access it from https://localhost:7149/
 
-9. The login screen will be displayed. So, make sure to create a user providing an email and a password and then login with those credentials. Log in with as many users as you want, in order to test the chat functionality.
+10. The login screen will be displayed. So, make sure to create a user providing an email and a password and then login with those credentials. Log in with as many users as you want, in order to test the chat functionality.
 
 
 ## Steps to run the tests 
