@@ -6,7 +6,12 @@ The solution was developed using .NET 6 with SignalR for the real time communica
 
 It was used the CSV Helper nuget package to handle the CSV parsing and MSTest for the tests.
 
-The IDE used was Visual Studio Professional 2022, version 17.2.6
+The IDE used was Visual Studio Professional 2022, version 17.2.6, in a Windows 10 operating system.
+
+Note:
+
+* This solution has been tested only on a Windows machine. It's pending to make sure all of the steps described here work on another operating system, but the general process should not vary too much.
+
 
 ## Code structure
 
