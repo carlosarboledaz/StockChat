@@ -72,6 +72,11 @@ You can also use an IDE that allows you to open a terminal, such as, for example
 
 4. If you are using Visual Studio, simply run the test from the tests explorer.
 
+## Example
+
+This screenshot shows two sessions open in different browsers with different users and the messages stored in the Messages table:
+
+<img width="910" alt="image" src="https://user-images.githubusercontent.com/53954994/215238531-33839b6d-71f2-4aef-89b4-a00798c15086.png">
 
 
 
