@@ -28,7 +28,6 @@ builder.Services.AddResponseCompression(opts =>
 
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AppUser>>();
 builder.Services.AddHttpClient<IStockService, StockService>();
-builder.Services.AddSingleton<WeatherForecastService>(); //Remove this later
 builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
 builder.Services.AddHostedService<RabbitMQConsumer>();
 
